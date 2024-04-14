@@ -1,6 +1,6 @@
-import projectsData from '@/data/projectsData'
 import Card from '@/components/Card'
 import { genPageMetadata } from 'app/seo'
+import projectsData from '@/data/projectsData'
 
 export const metadata = genPageMetadata({ title: 'Projects' })
 
@@ -13,7 +13,7 @@ export default function Projects() {
             Projects
           </h1>
           <p className="text-lg leading-7 text-gray-500 dark:text-gray-400">
-            Showcase your projects with a hero image (16 x 9)
+            Innovative Solutions Tailored for Digital Excellence
           </p>
         </div>
         <div className="container py-12">
