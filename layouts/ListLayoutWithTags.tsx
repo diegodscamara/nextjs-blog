@@ -1,15 +1,15 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 'use client'
 
-import { usePathname } from 'next/navigation'
-import { slug } from 'github-slugger'
-import { formatDate } from 'pliny/utils/formatDate'
-import { CoreContent } from 'pliny/utils/contentlayer'
 import type { Blog } from 'contentlayer/generated'
+import { CoreContent } from 'pliny/utils/contentlayer'
 import Link from '@/components/Link'
 import Tag from '@/components/Tag'
+import { formatDate } from 'pliny/utils/formatDate'
 import siteMetadata from '@/data/siteMetadata'
+import { slug } from 'github-slugger'
 import tagData from 'app/tag-data.json'
+import { usePathname } from 'next/navigation'
 
 interface PaginationProps {
   totalPages: number
@@ -142,6 +142,9 @@ export default function ListLayoutWithTags({
                           <div className="flex flex-wrap">
                             {tags?.map((tag) => <Tag key={tag} text={tag} />)}
                           </div>
+                          <span className="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
+                            {post.readingTime.text}
+                          </span>
                         </div>
                         <div className="prose max-w-none text-gray-500 dark:text-gray-400">
                           {summary}

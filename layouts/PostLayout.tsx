@@ -1,14 +1,15 @@
-import { ReactNode } from 'react'
-import { CoreContent } from 'pliny/utils/contentlayer'
-import type { Blog, Authors } from 'contentlayer/generated'
+import type { Authors, Blog } from 'contentlayer/generated'
+
 import Comments from '@/components/Comments'
+import { CoreContent } from 'pliny/utils/contentlayer'
+import Image from '@/components/Image'
 import Link from '@/components/Link'
 import PageTitle from '@/components/PageTitle'
+import { ReactNode } from 'react'
+import ScrollTopAndComment from '@/components/ScrollTopAndComment'
 import SectionContainer from '@/components/SectionContainer'
-import Image from '@/components/Image'
 import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
-import ScrollTopAndComment from '@/components/ScrollTopAndComment'
 
 const editUrl = (path) => `${siteMetadata.siteRepo}/blob/main/data/${path}`
 const discussUrl = (path) =>
@@ -30,7 +31,7 @@ interface LayoutProps {
 }
 
 export default function PostLayout({ content, authorDetails, next, prev, children }: LayoutProps) {
-  const { filePath, path, slug, date, title, tags } = content
+  const { filePath, path, slug, date, title, tags, readingTime } = content
   const basePath = path.split('/')[0]
 
   return (
@@ -53,6 +54,9 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
               <div>
                 <PageTitle>{title}</PageTitle>
               </div>
+              <span className="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
+                {readingTime.text}
+              </span>
             </div>
           </header>
           <div className="grid-rows-[auto_1fr] divide-y divide-gray-200 pb-8 dark:divide-gray-700 xl:grid xl:grid-cols-4 xl:gap-x-6 xl:divide-y-0">

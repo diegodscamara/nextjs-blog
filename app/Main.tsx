@@ -1,8 +1,8 @@
 import Link from '@/components/Link'
-import Tag from '@/components/Tag'
-import siteMetadata from '@/data/siteMetadata'
-import { formatDate } from 'pliny/utils/formatDate'
 import NewsletterForm from 'pliny/ui/NewsletterForm'
+import Tag from '@/components/Tag'
+import { formatDate } from 'pliny/utils/formatDate'
+import siteMetadata from '@/data/siteMetadata'
 
 const MAX_DISPLAY = 5
 
@@ -35,6 +35,10 @@ export default function Home({ posts }) {
                     <div className="space-y-5 xl:col-span-3">
                       <div className="space-y-6">
                         <div>
+                          <span className="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
+                            {post.readingTime.text}
+                          </span>
+
                           <h2 className="text-2xl font-bold leading-8 tracking-tight">
                             <Link
                               href={`/blog/${slug}`}
