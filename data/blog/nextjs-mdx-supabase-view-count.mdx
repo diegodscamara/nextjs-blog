@@ -1,0 +1,305 @@
+---
+title: 'How to Implement View Count in a Next.js Blog with MDX and Supabase'
+date: '2024-04-15'
+tags: ['Next.js', 'MDX', 'Supabase', 'Web Development', 'State Management', 'API', 'JavaScript']
+lastmod: '2024-04-15'
+draft: false
+summary: 'This comprehensive guide explores the integration of view count functionality in a Next.js blog using MDX for content management and Supabase as a backend. Learn step-by-step how to track and display the number of views for each blog post with detailed code examples and best practices.'
+images: []
+authors: ['default']
+layout: PostLayout
+canonicalUrl: 'https://diegocamara.com/blog/nextjs-mdx-supabase-view-count'
+---
+
+In the world of blogging, understanding reader engagement through metrics like page views can provide invaluable insights into content performance. This guide will demonstrate how to implement a view count system in a Next.js blog utilizing MDX for content and Supabase for backend services. We will walk through the entire process, providing you with all the necessary code and techniques to enhance your blog's functionality.
+
+## Table of Contents
+
+1. [Introduction](#introduction)
+2. [Prerequisites](#prerequisites)
+3. [Setting Up Supabase](#setting-up-supabase)
+4. [Integrating Supabase with Next.js](#integrating-supabase-with-nextjs)
+5. [Creating the View Counter API](#creating-the-view-counter-api)
+6. [Fetching and Displaying View Counts](#fetching-and-displaying-view-counts)
+7. [Optimizing Performance and Security](#optimizing-performance-and-security)
+8. [Best Practices for Tracking Views](#best-practices-for-tracking-views)
+9. [Troubleshooting Common Issues](#troubleshooting-common-issues)
+10. [Conclusion](#conclusion)
+11. [FAQ](#faq)
+
+## Introduction
+
+Tracking how many times a blog post has been viewed helps publishers understand which topics resonate most with their audience. Implementing this functionality in a Next.js application using MDX for content rendering and Supabase as a backend offers a robust, scalable, and modern approach to managing reader engagement data.
+
+## Prerequisites
+
+Before diving into the technical setup, ensure you have:
+
+- Basic knowledge of React and Next.js.
+- Familiarity with MDX and how it integrates within Next.js projects.
+- An account with Supabase and basic understanding of its features.
+
+## Setting Up Supabase
+
+First, create a new project in Supabase to store and manage your view counts:
+
+1. **Create a New Project**: Log into your Supabase account and create a new project. Note down the URL and anon key, as you will need them to connect your Next.js application.
+2. **Define the Database Schema**: Set up a table named `posts` with the following schema:
+   - `id`: Primary key, type UUID.
+   - `slug`: Text, unique identifier for each post.
+   - `views`: Integer, to store the view counts.
+
+```sql
+CREATE TABLE posts (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    slug TEXT UNIQUE,
+    views INTEGER DEFAULT 0
+);
+```
+
+## Integrating Supabase with Next.js
+
+Install the Supabase client library in your Next.js project:
+
+```bash
+npm install @supabase/supabase-js
+```
+
+Set up the Supabase client:
+
+```javascript
+// lib/supabase.js
+import { createClient } from '@supabase/supabase-js'
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+const supabase = createClient(supabaseUrl, supabaseAnonKey)
+
+export default supabase
+```
+
+## Creating the View Counter API
+
+Create an API route in Next.js to handle view count updates and retrievals:
+
+```javascript
+// pages/api/views/[slug].js
+import supabase from '../../../lib/supabase'
+
+export default async function handler(req, res) {
+  const { slug } = req.query
+
+  if (req.method === 'POST') {
+    const { data, error } = await supabase
+      .from('posts')
+      .upsert({ slug: slug, views: 1 }, { onConflict: 'slug' })
+      .increment('views')
+
+    if (error) return res.status(500).json({ error: error.message })
+    return res.status(200).json({ views: data[0].views })
+  } else if (req.method === 'GET') {
+    const { data, error } = await sup
+
+    abase.from('posts').select('views').eq('slug', slug).single()
+
+    if (error) return res.status(500).json({ error: error.message })
+    return res.status(200).json({ views: data.views })
+  } else {
+    res.setHeader('Allow', ['GET', 'POST'])
+    res.status(405).end(`Method ${req.method} Not Allowed`)
+  }
+}
+```
+
+## Fetching and Displaying View Counts
+
+In your blog post component, fetch and display the view count using the API endpoint:
+
+```javascript
+import { useEffect, useState } from 'react'
+
+const useFetchViews = (slug) => {
+  const [views, setViews] = useState(0)
+
+  useEffect(() => {
+    const fetchViews = async () => {
+      const res = await fetch(`/api/views/${slug}`)
+      const data = await res.json()
+      setViews(data.views)
+    }
+
+    fetchViews()
+  }, [slug])
+
+  return views
+}
+
+const BlogPost = ({ slug }) => {
+  const views = useFetchViews(slug)
+
+  return (
+    <div>
+      <h1>Blog Post Title</h1>
+      <p>{views} views</p>
+      {/* Rest of the blog content */}
+    </div>
+  )
+}
+```
+
+### Optimizing Performance and Security
+
+**Optimizing performance and enhancing security** are crucial when tracking and managing view counts on your blog. Here’s how to approach these aspects:
+
+#### Caching Strategies
+
+Caching the view count can significantly reduce the number of read and write operations to the database, thereby improving the performance:
+
+- **Client-Side Caching**: Use `localStorage` or `sessionStorage` to store the view counts temporarily. This reduces the load on your server and database by serving data from the cache if it’s available.
+
+  ```javascript
+  const useCachedViews = (slug) => {
+    const [views, setViews] = useState(() => {
+      // Try to load the views from local storage first
+      return localStorage.getItem(`views-${slug}`) || 0
+    })
+
+    useEffect(() => {
+      const fetchViews = async () => {
+        const response = await fetch(`/api/views/${slug}`)
+        const data = await response.json()
+        setViews(data.views)
+        localStorage.setItem(`views-${slug}`, data.views)
+      }
+
+      fetchViews()
+    }, [slug])
+
+    return views
+  }
+  ```
+
+- **Server-Side Caching**: Use tools like Redis to cache view counts on the server. This is particularly useful for high-traffic sites where database queries can become a bottleneck.
+
+#### Rate Limiting
+
+To prevent abuse (such as repeated refreshing to inflate view counts), implement rate limiting:
+
+- **Client-Side**: Throttle view count updates based on IP address or session.
+- **Server-Side**: Use middleware in your Next.js API routes to limit how often a client can increment the view count.
+
+  ```javascript
+  // Using express-rate-limit in a Next.js API route
+  import rateLimit from 'express-rate-limit'
+
+  const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // limit each IP to 100 requests per windowMs
+    standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+    legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+  })
+
+  export default function handler(req, res) {
+    limiter(req, res, () => {
+      // Handle the request as normal
+    })
+  }
+  ```
+
+### Best Practices for Tracking Views
+
+Effective tracking of views involves more than just counting every page load. Here are some best practices to ensure accurate and meaningful metrics:
+
+- **Session-Based Counting**: Only count one view per user session for each article. This prevents multiple counts from the same user refreshing the page.
+
+  ```javascript
+  useEffect(() => {
+    if (!sessionStorage.getItem(`viewed-${slug}`)) {
+      incrementPostViews(slug)
+      sessionStorage.setItem(`viewed-${slug}`, 'true')
+    }
+  }, [slug])
+  ```
+
+- **Bot Detection**: Implement basic bot detection by checking the user-agent of the browser. Exclude views from known bots and spiders.
+
+  ```javascript
+  const isBot = (userAgent) => {
+    const bots = ['googlebot', 'bingbot', 'yandexbot', 'duckduckbot']
+    return bots.some((bot) => userAgent.toLowerCase().includes(bot))
+  }
+
+  export default function handler(req, res) {
+    if (isBot(req.headers['user-agent'])) {
+      return res.status(403).json({ error: 'Bots are not allowed' })
+    }
+    // Proceed with counting the view
+  }
+  ```
+
+### Troubleshooting Common Issues
+
+When implementing view counts, several issues might arise. Here’s how to troubleshoot some common problems:
+
+- **Supabase Permissions**: Ensure your Supabase table permissions allow read and write operations for the appropriate users. Review your Supabase policy settings to confirm.
+
+  ```sql
+  -- Allow reads and increments from anyone
+  alter policy "Enable view counting" on public.posts
+      using (true)
+      with check (true);
+  ```
+
+- **API Errors**: Handle errors gracefully in your API routes. Make sure to log these errors and respond with meaningful messages.
+
+  ```javascript
+  export default async function handler(req, res) {
+    try {
+      // API logic here
+    } catch (error) {
+      console.error('API error:', error)
+      res.status(500).json({ error: 'Internal server error' })
+    }
+  }
+  ```
+
+- **Client-Side Fetching Issues**: Ensure your fetching logic handles failures, such as network errors or invalid responses.
+
+  ```javascript
+  useEffect(() => {
+    const fetchViews = async () => {
+      try {
+        const response = await fetch(`/api/views/${slug}`)
+        if (!response.ok) throw new Error('Failed to fetch views')
+        const data = await response.json()
+        setViews(data.views)
+      } catch (error) {
+        console.error('Failed to load views:', error)
+      }
+    }
+
+    fetchViews()
+  }, [slug])
+  ```
+
+## Conclusion
+
+Implementing a view count feature in your Next.js blog with MDX and Supabase not only enhances the functionality of your site but also provides crucial insights into your content's performance. By following the steps outlined in this guide, you can effectively track and display the popularity of your blog posts, helping you better understand and serve your audience.
+
+## FAQ
+
+1. **Why use Supabase for storing view counts?**
+   Supabase provides a scalable, easy-to-use backend with powerful capabilities for real-time data management, making it an excellent choice for dynamic features like view counting.
+
+2. **Can this setup handle high traffic?**
+   Yes, by implementing efficient database queries and considering caching strategies, this setup can scale well for high-traffic blogs.
+
+3. **How can I prevent fake views from inflating counts?**
+   Implementing logic to detect and filter out bot traffic, as well as using session-based counting, can help mitigate fake views.
+
+4. **Is there a way to see real-time view updates on my blog?**
+   Yes, Supabase offers real-time capabilities that can be integrated to show live view count updates as they happen.
+
+5. **What are the potential costs associated with this implementation?**
+   Supabase offers a generous free tier, which is typically adequate for small to medium-sized blogs; however, high traffic might require a paid plan to handle the increased workload.
