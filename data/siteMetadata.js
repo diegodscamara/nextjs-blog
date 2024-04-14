@@ -7,9 +7,9 @@ const siteMetadata = {
     'Explore full stack development insights with a focus on React, Next.js, and Node.js through tutorials, tips, and tech trends.',
   language: 'en-us',
   theme: 'dark', // system, dark or light
-  siteUrl: 'https://tailwind-nextjs-starter-blog.vercel.app',
-  siteRepo: 'https://github.com/timlrx/tailwind-nextjs-starter-blog',
-  siteLogo: '/static/images/logo.png',
+  siteUrl: 'https://diegocamara.com',
+  siteRepo: 'https://github.com/diegodscamara/blog',
+  siteLogo: '/static/images/avatar.png',
   socialBanner: '/static/images/twitter-card.png',
   mastodon: null,
   email: 'diegodscamara@gmail.com.com',
@@ -39,9 +39,9 @@ const siteMetadata = {
     // posthogAnalytics: {
     //   posthogProjectApiKey: '', // e.g. 123e4567-e89b-12d3-a456-426614174000
     // },
-    // googleAnalytics: {
-    //   googleAnalyticsId: '', // e.g. G-XXXXXXX
-    // },
+    googleAnalytics: {
+      googleAnalyticsId: process.env.GOOGLE_ANALYTICS_ID, // e.g. G-XXXXXXX
+    },
   },
   newsletter: {
     // supports mailchimp, buttondown, convertkit, klaviyo, revue, emailoctopus
