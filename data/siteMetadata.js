@@ -8,7 +8,7 @@ const siteMetadata = {
   language: 'en-us',
   theme: 'dark', // system, dark or light
   siteUrl: 'https://diegocamara.com',
-  siteRepo: 'https://github.com/diegodscamara/blog',
+  siteRepo: 'https://github.com/diegodscamara/nextjs-blog',
   siteLogo: '/static/images/avatar.png',
   socialBanner: '/static/images/twitter-card.png',
   mastodon: null,
