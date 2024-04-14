@@ -11,8 +11,8 @@ const Header = () => {
     <header className="flex items-center justify-between py-10">
       <div>
         <Link href="/" aria-label={siteMetadata.headerTitle}>
-          <div className="flex items-center justify-between rounded-lg p-2 transition-all hover:bg-slate-100 dark:hover:bg-slate-900">
-            <div className="mr-3">
+          <div className="flex items-center justify-between rounded-full p-2 transition-all hover:bg-slate-100 dark:hover:bg-slate-900 sm:rounded-lg">
+            <div className="mr-0 sm:mr-3">
               <Logo />
             </div>
             {typeof siteMetadata.headerTitle === 'string' ? (
