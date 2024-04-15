@@ -9,6 +9,7 @@ import { Metadata } from 'next'
 import { SearchProvider } from './search-provider'
 import SectionContainer from '@/components/SectionContainer'
 import { Space_Grotesk } from 'next/font/google'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 import { ThemeProviders } from './theme-providers'
 import { Analytics as VercelAnalytics } from '@vercel/analytics/react'
 import siteMetadata from '@/data/siteMetadata'
@@ -80,6 +81,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Analytics analyticsConfig={siteMetadata.analytics as AnalyticsConfig} />
           <VercelAnalytics />
           <SectionContainer>
+            <SpeedInsights />
             <div className="flex h-screen flex-col justify-between font-sans">
               <SearchProvider>
                 <Header />

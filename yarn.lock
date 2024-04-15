@@ -3806,6 +3806,33 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@vercel/speed-insights@npm:^1.0.10":
+  version: 1.0.10
+  resolution: "@vercel/speed-insights@npm:1.0.10"
+  peerDependencies:
+    "@sveltejs/kit": ^1 || ^2
+    next: ">= 13"
+    react: ^18 || ^19
+    svelte: ^4
+    vue: ^3
+    vue-router: ^4
+  peerDependenciesMeta:
+    "@sveltejs/kit":
+      optional: true
+    next:
+      optional: true
+    react:
+      optional: true
+    svelte:
+      optional: true
+    vue:
+      optional: true
+    vue-router:
+      optional: true
+  checksum: 26171c424ed725bbb82020818428a37e54715dfba58ae8ccff53c1bb58787f3713a9d8695afbbb5439555b92614f099fdb5188f80d9855818fddf7c192e8033e
+  languageName: node
+  linkType: hard
+
 "@vercel/static-build@npm:2.4.6":
   version: 2.4.6
   resolution: "@vercel/static-build@npm:2.4.6"
@@ -12352,6 +12379,7 @@ __metadata:
     "@typescript-eslint/parser": ^6.1.0
     "@vercel/analytics": ^1.2.2
     "@vercel/postgres": ^0.8.0
+    "@vercel/speed-insights": ^1.0.10
     autoprefixer: ^10.4.13
     contentlayer2: 0.4.4
     cross-env: ^7.0.3
