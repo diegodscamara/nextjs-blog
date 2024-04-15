@@ -10,6 +10,7 @@ import { SearchProvider } from './search-provider'
 import SectionContainer from '@/components/SectionContainer'
 import { Space_Grotesk } from 'next/font/google'
 import { ThemeProviders } from './theme-providers'
+import { Analytics as VercelAnalytics } from '@vercel/analytics/react'
 import siteMetadata from '@/data/siteMetadata'
 
 const space_grotesk = Space_Grotesk({
@@ -77,6 +78,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="bg-white pl-[calc(100vw-100%)] text-black antialiased dark:bg-gray-950 dark:text-white">
         <ThemeProviders>
           <Analytics analyticsConfig={siteMetadata.analytics as AnalyticsConfig} />
+          <VercelAnalytics />
           <SectionContainer>
             <div className="flex h-screen flex-col justify-between font-sans">
               <SearchProvider>
