@@ -17,7 +17,7 @@ const SearchButton = () => {
       <SearchButtonWrapper
         aria-label="Search"
         title="Search"
-        className="flex-rol flex items-center justify-between gap-4 rounded-full bg-slate-100 p-2 text-slate-500 hover:bg-slate-200 dark:bg-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 md:w-[200px]"
+        className="flex-rol flex items-center justify-between gap-4 rounded-full bg-slate-100 p-2 text-slate-500 shadow-sm hover:shadow-md dark:bg-slate-800 dark:text-slate-400 md:w-[200px]"
       >
         <div className="flex flex-row items-center gap-2">
           <IoIosSearch className="" />
