@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+
 import { useTheme } from 'next-themes'
 
 const ThemeSwitch = () => {
@@ -12,8 +13,11 @@ const ThemeSwitch = () => {
 
   return (
     <button
-      aria-label="Toggle Dark Mode"
+      aria-label={`${resolvedTheme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}`}
+      type="button"
+      title={`${resolvedTheme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}`}
       onClick={() => setTheme(theme === 'dark' || resolvedTheme === 'dark' ? 'light' : 'dark')}
+      className="rounded-full p-2 hover:bg-slate-100 dark:hover:bg-slate-900"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"

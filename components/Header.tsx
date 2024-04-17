@@ -11,28 +11,28 @@ const Header = () => {
     <header className="flex items-center justify-between py-10">
       <div>
         <Link href="/" aria-label={siteMetadata.headerTitle}>
-          <div className="flex items-center justify-between rounded-full p-2 transition-all hover:bg-slate-100 dark:hover:bg-slate-900 sm:rounded-lg">
+          <div className="flex items-center justify-between rounded-full p-2 hover:bg-slate-100 dark:hover:bg-slate-800 sm:rounded-lg">
             <div className="mr-0 sm:mr-3">
               <Logo />
             </div>
             {typeof siteMetadata.headerTitle === 'string' ? (
-              <div className="hidden h-auto text-lg font-semibold sm:block">
+              <h2 className="hidden h-auto text-lg font-semibold transition-none sm:block">
                 {siteMetadata.headerTitle}
-              </div>
+              </h2>
             ) : (
               siteMetadata.headerTitle
             )}
           </div>
         </Link>
       </div>
-      <div className="flex items-center space-x-4 leading-5 sm:space-x-6">
+      <div className="flex items-center leading-5 sm:space-x-2">
         {headerNavLinks
           .filter((link) => link.href !== '/')
           .map((link) => (
             <Link
               key={link.title}
               href={link.href}
-              className="hidden font-medium text-gray-900 dark:text-gray-100 sm:block"
+              className="hidden rounded-lg p-2 font-medium text-gray-800 hover:bg-slate-100 dark:text-gray-200 dark:hover:bg-slate-800 sm:block"
             >
               {link.title}
             </Link>
